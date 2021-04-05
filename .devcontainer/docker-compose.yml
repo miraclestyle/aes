@@ -4,14 +4,14 @@ services:
     build:
       context: ../
       dockerfile: .devcontainer/Dockerfile
-    image: node_template_image
+    image: aes_image
     stdin_open: true
     tty: true
-    container_name: node_template_container
+    container_name: aes_container
     volumes:
       - type: volume
-        source: node_template_volume
+        source: aes_volume
         target: /home/developer/app
 
 volumes:
-  node_template_volume:
+  aes_volume:
