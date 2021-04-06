@@ -103,5 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-#Desktop Service Store
+# Desktop Service Store
 .DS_Store
