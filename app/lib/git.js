@@ -26,16 +26,26 @@ const getUser = async (username) => {
   return user.data;
 };
 
-const getRepos = async (username) => {
+const getRepos = async (username, count) => {
   const url = getReposUrl(username);
-  const repos = await axios.get(url);
-  return repos.data;
+  let repos = [];
+  const n = Math.ceil(count / 100);
+  const pages = new Array(n);
+  for (let i = 0; i < n; i += 1) {
+    const params = { per_page: 100, page: i };
+    pages[i] = axios.get(url, { params });
+  }
+  const resolved = await Promise.all(pages);
+  resolved.forEach((page) => {
+    repos = repos.concat(page.data);
+  });
+  return repos;
 };
 
 const getUserStats = async (username) => {
   const user = await getUser(username);
-  const repos = await getRepos(username);
   const uStats = userStats(user);
+  const repos = await getRepos(username, uStats.repositories);
   const rStats = reposStats(repos);
   const stats = { ...uStats, ...rStats };
   return stats;
