@@ -4,10 +4,23 @@ const {
   expect,
 } = require('@jest/globals');
 
-const solution = require('../app');
+const { getUserStats } = require('../app');
 
 describe('Test app:', () => {
-  test('Shoud verify the solution', () => {
-    expect(solution(5, 3)).toBe(15);
+  test('Shoud verify the solution', (done) => {
+    const expected = {
+      followers: 3629,
+      following: 9,
+      repositories: 8,
+      stars: 12235,
+      watchers: 12235,
+      forks: 118938,
+    };
+    getUserStats('octocat').then((stats) => {
+      console.log('expected:', expected);
+      console.log('stats:', stats);
+      expect(stats).toEqual(expected);
+      done();
+    });
   });
 });
