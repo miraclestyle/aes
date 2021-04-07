@@ -28,7 +28,7 @@ const getUser = async (username) => {
 
 const getRepos = async (username, count) => {
   const url = getReposUrl(username);
-  let repos = [];
+  const repos = new Array(count);
   const n = Math.ceil(count / 100);
   const pages = new Array(n);
   for (let i = 0; i < n; i += 1) {
@@ -36,8 +36,13 @@ const getRepos = async (username, count) => {
     pages[i] = axios.get(url, { params });
   }
   const resolved = await Promise.all(pages);
+  // The upper bound in time complexity of this algorithm is O(n)
   resolved.forEach((page) => {
-    repos = repos.concat(page.data);
+    let i = 0;
+    page.data.forEach((repo) => {
+      repos[i] = repo;
+      i += 1;
+    });
   });
   return repos;
 };
